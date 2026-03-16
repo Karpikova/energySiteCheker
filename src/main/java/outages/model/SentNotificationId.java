@@ -1,0 +1,19 @@
+package outages.model;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.Data;
+
+import java.io.Serializable;
+import java.util.UUID;
+
+@Data
+@Embeddable
+public class SentNotificationId implements Serializable {
+
+    @Column(name = "chat_id")
+    private Long chatId;
+
+    @Column(name = "outage_id")
+    private UUID outageId;
+}

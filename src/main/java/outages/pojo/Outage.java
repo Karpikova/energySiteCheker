@@ -3,12 +3,14 @@ package outages.pojo;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
+import java.util.UUID;
+
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Outage {
     private String type;
-    private String id;
+    private UUID id;
     private Properties properties;
     private Geometry geometry;
 

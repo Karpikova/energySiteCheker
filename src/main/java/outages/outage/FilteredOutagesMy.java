@@ -1,4 +1,4 @@
-package outages;
+package outages.outage;
 
 
 import outages.pojo.Outage;

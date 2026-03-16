@@ -1,13 +1,9 @@
-package outages;
+package outages.outage;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import outages.html.BodyHtml;
 import outages.pojo.Outage;
 
-import java.net.http.HttpClient;
 import java.util.List;
 
 public final class FoundOutagesFromWeb implements FoundOutages {
@@ -20,8 +16,7 @@ public final class FoundOutagesFromWeb implements FoundOutages {
 
     @Override
     public List<Outage> outages() throws Exception {
-        List<Outage> outages = mapper.readValue(body, new TypeReference<>() {
+        return mapper.readValue(body, new TypeReference<>() {
         });
-        return outages;
     }
 }

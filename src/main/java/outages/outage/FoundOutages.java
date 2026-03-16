@@ -1,8 +1,7 @@
-package outages;
+package outages.outage;
 
 import outages.pojo.Outage;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public interface FoundOutages {
