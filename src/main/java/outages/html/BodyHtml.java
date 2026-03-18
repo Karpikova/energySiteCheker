@@ -1,10 +1,13 @@
 package outages.html;
 
+import org.apache.http.HttpException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
+import java.net.http.HttpConnectTimeoutException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
@@ -20,7 +23,7 @@ public class BodyHtml {
     }
 
     public String body() throws Exception {
-        LOGGER.info("Вызываю " + url);
+        LOGGER.info("Вызываю {}", url);
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(url))
                 .GET()
@@ -30,9 +33,7 @@ public class BodyHtml {
         if (response.statusCode() == 200) {
             return body;
         } else {
-            int sc = response.statusCode();
-            System.out.println("Ошибка API: " + sc);
-            throw new Exception(String.valueOf(sc));
+            throw new HttpException(String.valueOf(response.statusCode()));
         }
     }
 }

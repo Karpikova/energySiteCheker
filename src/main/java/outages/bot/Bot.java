@@ -1,17 +1,25 @@
 package outages.bot;
 
-import outages.html.BodyHtml;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
-
-import java.net.http.HttpClient;
+import outages.pojo.Outage;
+import outages.service.SentNotificationService;
 
 @Component
 public final class Bot extends TelegramLongPollingBot implements SendingMessageTelegramLongPollingBot {
+
+    private final static Logger LOGGER = LogManager.getLogger(Bot.class);
+
+    @Autowired
+    SentNotificationService service;
+
     @Value("${bot.name}")
     private String botUsername;
 
@@ -30,16 +38,17 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
     }
 
     @Override
-    public void sendMessage(String msg, Long... chatIds) {
+    public void sendMessage(Outage outage, Long... chatIds) {
         SendMessage response = new SendMessage();
         for (Long chatId : chatIds) {
             response.setChatId(String.valueOf(chatId));
-            response.setText(msg);
+            response.setText(outage.printableView());
             try {
                 System.out.println(chatId);
                 execute(response);
+                service.markAsSent(chatId, outage.getId());
             } catch (TelegramApiException e) {
-                System.out.println("Failed to send message");
+                LOGGER.error("Failed to send message: {}", e);
             }
         }
     }
@@ -47,7 +56,14 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-
+            SendMessage response = new SendMessage();
+            response.setChatId(String.valueOf(update.getUpdateId()));
+            response.setText("I'm alive");
+            try {
+                execute(response);
+            } catch (TelegramApiException e) {
+                LOGGER.error("Failed to send message: {}", e);
+            }
         }
     }
 

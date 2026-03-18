@@ -14,9 +14,6 @@ import java.util.UUID;
 public class ProcessOutageMy implements ProcessOutage {
 
     @Autowired
-    SentNotificationService service;
-
-    @Autowired
     SendingMessageTelegramLongPollingBot bot;
 
     @Autowired
@@ -30,8 +27,7 @@ public class ProcessOutageMy implements ProcessOutage {
         UUID outageId = outage.getId();
         for (Long chatId : chatIds) {
             if (!snr.existsByIdChatIdAndIdOutageId(chatId, outageId)) {
-                bot.sendMessage(outage.printableView(), chatIds);
-                service.markAsSent(chatId, outageId);
+                bot.sendMessage(outage, chatIds);
             }
         }
     }
