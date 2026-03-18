@@ -20,6 +20,7 @@ public class Outage {
 
     public String printableView() {
         return type + System.lineSeparator() +
+                getId() + System.lineSeparator() +
                 properties.getBalloonContentHeader() + System.lineSeparator() +
                 properties.getBalloonContentBody() + System.lineSeparator() +
                 properties.getBalloonContentFooter() + System.lineSeparator();
