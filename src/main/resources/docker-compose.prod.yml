@@ -2,7 +2,7 @@ version: '3.8'
 
 services:
   bot:
-    image: ${{ secrets.DOCKER_USERNAME }}/energy-bot:latest   # ← замени на свой
+    image: karpikova/energy-bot:latest   # ← docker username
     container_name: energy-bot
     restart: unless-stopped
     environment:
