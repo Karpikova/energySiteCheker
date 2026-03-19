@@ -90,13 +90,18 @@ public class ProcessOutageMyTest {
 
     @Test
     public void processTest() {
-        Outage outage1 = new Outage("Feature", uuid1, new Properties(), new Geometry());
+        Outage outage1 = new Outage.Builder()
+                .id(uuid1)
+                .build();
         processOutage.process(outage1);
         Assert.assertEquals(3, repository.count());
 
-        Outage outage2 = new Outage("Feature", uuid2, new Properties(), new Geometry());
+        Outage outage2 = new Outage.Builder()
+                .id(uuid2)
+                .build();
         processOutage.process(outage2);
         Assert.assertEquals(4, repository.count());
+
         long countById = em.createQuery("SELECT COUNT(s) FROM SentNotification s WHERE s.id.chatId = :chatId",
                 Long.class)
                 .setParameter("chatId", husbandsChatId)
