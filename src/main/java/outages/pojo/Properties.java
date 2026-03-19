@@ -5,7 +5,7 @@ import lombok.Data;
 
 @Data
 @JsonIgnoreProperties(ignoreUnknown = true)
-class Properties {
+public class Properties {
     private String balloonContentHeader;
     private String balloonContentBody;
     private String balloonContentFooter;

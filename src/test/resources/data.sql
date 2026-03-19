@@ -1,0 +1,4 @@
+INSERT INTO sent_notifications (chat_id, outage_id, sent_at) VALUES
+(358906883, '550e8400-e29b-41d4-a716-446655440000', NOW()),
+(358906883, '660e8400-e29b-41d4-a716-446655440001', NOW()),
+(456, '660e8400-e29b-41d4-a716-446655440001', NOW());

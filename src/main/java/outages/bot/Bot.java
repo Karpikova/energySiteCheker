@@ -2,7 +2,6 @@ package outages.bot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -10,15 +9,11 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import outages.pojo.Outage;
-import outages.service.SentNotificationService;
 
 @Component
 public final class Bot extends TelegramLongPollingBot implements SendingMessageTelegramLongPollingBot {
 
     private final static Logger LOGGER = LogManager.getLogger(Bot.class);
-
-    @Autowired
-    SentNotificationService service;
 
     @Value("${bot.name}")
     private String botUsername;
@@ -38,18 +33,17 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
     }
 
     @Override
-    public void sendMessage(Outage outage, Long... chatIds) {
+    public boolean sendMessage(Outage outage, Long chatId) {
         SendMessage response = new SendMessage();
-        for (Long chatId : chatIds) {
-            response.setChatId(String.valueOf(chatId));
-            response.setText(outage.printableView());
-            try {
-                System.out.println(chatId);
-                execute(response);
-                service.markAsSent(chatId, outage.getId());
-            } catch (TelegramApiException e) {
-                LOGGER.error("Failed to send message: {}", e);
-            }
+        response.setChatId(String.valueOf(chatId));
+        response.setText(outage.printableView());
+        try {
+            System.out.println(chatId);
+            execute(response);
+            return true;
+        } catch (TelegramApiException e) {
+            LOGGER.error("Failed to send message: {}", e);
+            return false;
         }
     }
 

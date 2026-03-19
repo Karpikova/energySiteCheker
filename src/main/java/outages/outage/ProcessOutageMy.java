@@ -17,6 +17,9 @@ public class ProcessOutageMy implements ProcessOutage {
     SendingMessageTelegramLongPollingBot bot;
 
     @Autowired
+    SentNotificationService service;
+
+    @Autowired
     SentNotificationRepository snr;
 
     @Value("${bot.chatIds}")
@@ -27,7 +30,9 @@ public class ProcessOutageMy implements ProcessOutage {
         UUID outageId = outage.getId();
         for (Long chatId : chatIds) {
             if (!snr.existsByIdChatIdAndIdOutageId(chatId, outageId)) {
-                bot.sendMessage(outage, chatIds);
+                if (bot.sendMessage(outage, chatId)) {
+                    service.markAsSent(chatId, outage.getId());
+                };
             }
         }
     }

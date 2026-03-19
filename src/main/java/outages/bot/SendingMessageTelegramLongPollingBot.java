@@ -5,5 +5,5 @@ import outages.pojo.Outage;
 
 public interface SendingMessageTelegramLongPollingBot extends LongPollingBot {
 
-    void sendMessage(Outage outage, Long... chatIds);
+    boolean sendMessage(Outage outage, Long chatIds);
 }
