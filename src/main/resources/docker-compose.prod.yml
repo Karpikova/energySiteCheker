@@ -1,0 +1,36 @@
+version: '3.8'
+
+services:
+  bot:
+    image: ${{ secrets.DOCKER_USERNAME }}/energy-bot:latest   # ← замени на свой
+    container_name: energy-bot
+    restart: unless-stopped
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - URL=${URL}
+      - DB_HOST=db
+      - DB_PORT=5432
+      - DB_NAME=botdb
+      - DB_USER=botuser
+      - DB_PASSWORD=${DB_PASSWORD}
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15
+    container_name: energy-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=botdb
+      - POSTGRES_USER=botuser
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U botuser"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:

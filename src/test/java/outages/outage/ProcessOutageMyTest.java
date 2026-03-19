@@ -2,9 +2,9 @@ package outages.outage;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
-import org.junit.jupiter.api.Test;
 import org.junit.Assert;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +19,7 @@ import org.testcontainers.junit.jupiter.Testcontainers;
 import outages.bot.SendingMessageTelegramLongPollingBot;
 import outages.model.SentNotification;
 import outages.model.SentNotificationId;
-import outages.pojo.Geometry;
 import outages.pojo.Outage;
-import outages.pojo.Properties;
 import outages.repository.SentNotificationRepository;
 import outages.sceduled.ScheduledCheck;
 
@@ -72,7 +70,7 @@ public class ProcessOutageMyTest {
 
     @BeforeEach
     public void setUp() {
-        Mockito.when(bot.sendMessage(any(),any())).thenReturn(true);
+        Mockito.when(bot.sendMessage(any(), any())).thenReturn(true);
 
         SentNotification notification1 = new SentNotification();
         notification1.setId(new SentNotificationId(myChatId, uuid1));
@@ -103,7 +101,7 @@ public class ProcessOutageMyTest {
         Assert.assertEquals(4, repository.count());
 
         long countById = em.createQuery("SELECT COUNT(s) FROM SentNotification s WHERE s.id.chatId = :chatId",
-                Long.class)
+                        Long.class)
                 .setParameter("chatId", husbandsChatId)
                 .getSingleResult();
         Assert.assertEquals(2, countById);
