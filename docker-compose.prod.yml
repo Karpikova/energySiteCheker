@@ -22,7 +22,7 @@ services:
     restart: unless-stopped
     environment:
       - POSTGRES_DB=botdb
-      - POSTGRES_USER=botuser
+      - POSTGRES_USER=admin
       - POSTGRES_PASSWORD=${DB_PASSWORD}
     volumes:
       - postgres_data:/var/lib/postgresql/data
