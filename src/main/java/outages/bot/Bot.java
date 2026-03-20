@@ -52,7 +52,7 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
         if (update.hasMessage()) {
             System.out.println(update.getUpdateId());
             SendMessage response = new SendMessage();
-            response.setChatId(String.valueOf(update.getUpdateId()));
+            response.setChatId(String.valueOf(update.getMessage().getChatId()));
             response.setText("I'm alive");
             try {
                 execute(response);
