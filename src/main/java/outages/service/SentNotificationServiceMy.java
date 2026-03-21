@@ -21,4 +21,10 @@ public class SentNotificationServiceMy implements SentNotificationService {
         notification.setId(id);
         repository.save(notification);
     }
+
+    @Override
+    public boolean existsByIdChatIdAndIdOutageId(Long chatId, UUID outageId) {
+        repository.existsByIdChatIdAndIdOutageId(chatId, outageId);
+        return false;
+    }
 }

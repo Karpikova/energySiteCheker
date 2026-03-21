@@ -2,6 +2,7 @@ package outages.outage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import outages.bot.SendingMessageTelegramLongPollingBot;
 import outages.pojo.Outage;
@@ -14,13 +15,11 @@ import java.util.UUID;
 public class ProcessOutageMy implements ProcessOutage {
 
     @Autowired
+    @Lazy
     SendingMessageTelegramLongPollingBot bot;
 
     @Autowired
     SentNotificationService service;
-
-    @Autowired
-    SentNotificationRepository snr;
 
     @Value("${bot.chatIds}")
     private Long[] chatIds;
@@ -29,7 +28,7 @@ public class ProcessOutageMy implements ProcessOutage {
     public void process(Outage outage) {
         UUID outageId = outage.getId();
         for (Long chatId : chatIds) {
-            if (!snr.existsByIdChatIdAndIdOutageId(chatId, outageId)) {
+            if (!service.existsByIdChatIdAndIdOutageId(chatId, outageId)) {
                 if (bot.sendMessage(outage, chatId)) {
                     service.markAsSent(chatId, outage.getId());
                 };
