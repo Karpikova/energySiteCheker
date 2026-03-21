@@ -57,6 +57,9 @@ public class ProcessOutageMyTest {
     private ScheduledCheck sc;
 
     @MockBean
+    private  OutageService oc;
+
+    @MockBean
     private SendingMessageTelegramLongPollingBot bot;
 
     @Value("${bot.myChatId}")

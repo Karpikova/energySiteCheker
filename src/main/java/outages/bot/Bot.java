@@ -2,12 +2,14 @@ package outages.bot;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
+import outages.outage.OutageService;
 import outages.pojo.Outage;
 
 @Component
@@ -15,14 +17,14 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
 
     private final static Logger LOGGER = LogManager.getLogger(Bot.class);
 
+    @Autowired
+    OutageService os;
+
     @Value("${bot.name}")
     private String botUsername;
 
     @Value("${bot.token}")
     private String botToken;
-
-    @Value("${bot.url}")
-    private String baseUrl;
 
     public String getBotUsername() {
         return botUsername;
@@ -50,15 +52,8 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
     @Override
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
-            System.out.println(update.getUpdateId());
-            SendMessage response = new SendMessage();
-            response.setChatId(String.valueOf(update.getMessage().getChatId()));
-            response.setText("I'm alive");
-            try {
-                execute(response);
-            } catch (TelegramApiException e) {
-                LOGGER.error("Failed to send message: {}", e);
-            }
+            Long[] chatId = {update.getMessage().getChatId()};
+            os.check(chatId);
         }
     }
 
