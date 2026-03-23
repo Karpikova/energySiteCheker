@@ -8,6 +8,8 @@ services:
     environment:
       - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
       - URL=${URL}
+      - POINT_SEARCH=${POINT_SEARCH}
+      - COMMON_SEARCH=${COMMON_SEARCH}
       - DB_HOST=db
       - DB_PORT=5432
       - DB_NAME=botdb
