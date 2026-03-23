@@ -1,5 +1,7 @@
 package outages.outage;
 
 public interface OutageService {
-    void check(Long[] chatIds);
+    void checkNearBy(Long[] chatIds);
+
+    void checkSizeAround(Long[] chatIds);
 }

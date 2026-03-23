@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 @Testcontainers
 @SpringBootTest
 @ActiveProfiles("test")
-public class ProcessOutageMyTest {
+public class ProcessResultMyTest {
     @Container
     static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15")
             .withDatabaseName("testdb")
@@ -45,7 +45,7 @@ public class ProcessOutageMyTest {
     }
 
     @Autowired
-    private ProcessOutage processOutage;
+    private ProcessResult processResult;
 
     @Autowired
     SentNotificationRepository repository;
@@ -73,7 +73,7 @@ public class ProcessOutageMyTest {
 
     @BeforeEach
     public void setUp() {
-        Mockito.when(bot.sendMessage(any(), any())).thenReturn(true);
+        Mockito.when(bot.sendMessage((Outage) any(), any())).thenReturn(true);
 
         SentNotification notification1 = new SentNotification();
         notification1.setId(new SentNotificationId(myChatId, uuid1));
@@ -90,17 +90,17 @@ public class ProcessOutageMyTest {
     }
 
     @Test
-    public void processTest() {
+    public void processOutageTest() {
         Outage outage1 = new Outage.Builder()
                 .id(uuid1)
                 .build();
-        processOutage.process(outage1);
+        processResult.processOutage(outage1);
         Assert.assertEquals(3, repository.count());
 
         Outage outage2 = new Outage.Builder()
                 .id(uuid2)
                 .build();
-        processOutage.process(outage2);
+        processResult.processOutage(outage2);
         Assert.assertEquals(4, repository.count());
 
         long countById = em.createQuery("SELECT COUNT(s) FROM SentNotification s WHERE s.id.chatId = :chatId",

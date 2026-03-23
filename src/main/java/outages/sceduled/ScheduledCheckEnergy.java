@@ -18,7 +18,12 @@ public final class ScheduledCheckEnergy implements ScheduledCheck {
     @Override
     @Scheduled(fixedRateString = "${bot.scheduler.interval}")
     public void scheduledCheck() {
-        os.check(chatIds);
+        os.checkNearBy(chatIds);
     }
 
+    @Scheduled(fixedRateString = "${bot.scheduler.intervalCommon}")
+    @Override
+    public void scheduledCheckCommon() {
+        os.checkSizeAround(chatIds);
+    }
 }

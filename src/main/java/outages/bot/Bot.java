@@ -36,9 +36,14 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
 
     @Override
     public boolean sendMessage(Outage outage, Long chatId) {
+        return sendMessage(outage.printableView(), chatId);
+    }
+
+    @Override
+    public boolean sendMessage(String text, Long chatId) {
         SendMessage response = new SendMessage();
         response.setChatId(String.valueOf(chatId));
-        response.setText(outage.printableView());
+        response.setText(text);
         try {
             System.out.println(chatId);
             execute(response);
@@ -53,7 +58,7 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
     public void onUpdateReceived(Update update) {
         if (update.hasMessage()) {
             Long[] chatId = {update.getMessage().getChatId()};
-            os.check(chatId);
+            os.checkNearBy(chatId);
         }
     }
 

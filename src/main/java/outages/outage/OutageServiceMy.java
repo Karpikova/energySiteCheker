@@ -17,13 +17,16 @@ public class OutageServiceMy implements OutageService {
     private final static Logger LOGGER = LogManager.getLogger(OutageServiceMy.class);
 
     @Autowired
-    ProcessOutage processOutage;
+    ProcessResult processResult;
 
     @Value("${bot.url}")
     private String baseUrl;
 
-    @Value("${bot.textToFind}")
-    private String textToFind;
+    @Value("${bot.pointSearch}")
+    private String pointSearch;
+
+    @Value("${bot.commonSearch}")
+    private String[] commonSearch;
 
     @Value("${bot.x}")
     private Float x;
@@ -35,12 +38,12 @@ public class OutageServiceMy implements OutageService {
     private Float r;
 
     @Override
-    public void check(Long[] chatIds) {
+    public void checkNearBy(Long[] chatIds) {
         try {
             String body = new BodyHtml(HttpClient.newHttpClient(), baseUrl).body();
             FilteredOutages filtered = new FilteredOutagesMy(new FoundOutagesFromWeb(body).outages());
-            List<Outage> filteredByText = filtered.filteredByStringInHeader(textToFind);
-            LOGGER.info("Found {} outages by text {}.", filteredByText.size(), textToFind);
+            List<Outage> filteredByText = filtered.filteredByStringInHeader(pointSearch);
+            LOGGER.info("Found {} outages by text {}.", filteredByText.size(), pointSearch);
             sendOutage(filteredByText);
             List<Outage> filteredByRadius = filtered.filteredByRadius(x, y, r);
             LOGGER.info("Found {} outages by radius {}.", filteredByRadius.size(), r);
@@ -50,9 +53,24 @@ public class OutageServiceMy implements OutageService {
         }
     }
 
+    @Override
+    public void checkSizeAround(Long[] chatIds) {
+        try {
+            String body = new BodyHtml(HttpClient.newHttpClient(), baseUrl).body();
+            for (String search : commonSearch) {
+                FilteredOutages filtered = new FilteredOutagesMy(new FoundOutagesFromWeb(body).outages());
+                int filteredByTextSize = filtered.filteredByStringInHeader(search).size();
+                LOGGER.info("Found {} outages by text {}.", filteredByTextSize, search);
+                processResult.processPlainText(String.format("Отключений в %s %s", search, filteredByTextSize));
+            }
+        } catch (Exception e) {
+            LOGGER.error("Ошибка верхнего уровня: {}", e);
+        }
+    }
+
     private void sendOutage(List<Outage> outages) {
         for (Outage outage : outages) {
-            processOutage.process(outage);
+            processResult.processOutage(outage);
         }
     }
 }
