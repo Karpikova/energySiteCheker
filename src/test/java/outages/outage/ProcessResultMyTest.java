@@ -95,12 +95,14 @@ public class ProcessResultMyTest {
                 .id(uuid1)
                 .build();
         processResult.processOutage(outage1);
+        Mockito.verify(bot, Mockito.times(0)).sendMessage(any(Outage.class), any(Long.class));
         Assert.assertEquals(3, repository.count());
 
         Outage outage2 = new Outage.Builder()
                 .id(uuid2)
                 .build();
         processResult.processOutage(outage2);
+        Mockito.verify(bot, Mockito.times(1)).sendMessage(any(Outage.class), any(Long.class));
         Assert.assertEquals(4, repository.count());
 
         long countById = em.createQuery("SELECT COUNT(s) FROM SentNotification s WHERE s.id.chatId = :chatId",

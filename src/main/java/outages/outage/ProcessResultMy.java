@@ -29,7 +29,7 @@ public final class ProcessResultMy implements ProcessResult {
         for (Long chatId : chatIds) {
             if (!service.existsByIdChatIdAndIdOutageId(chatId, outageId)) {
                 if (bot.sendMessage(outage, chatId)) {
-                    service.markAsSent(chatId, outage.getId());
+                    service.markAsSent(chatId, outageId);
                 }
             }
         }

@@ -25,7 +25,7 @@ public class SentNotificationServiceMy implements SentNotificationService {
         SentNotification notification = new SentNotification();
         notification.setId(id);
         repository.save(notification);
-        LOGGER.info("Written to db % (chatId), % (outageId).");
+        LOGGER.info("Written to db {} (chatId), {} (outageId).", chatId, outageId);
     }
 
     @Override
