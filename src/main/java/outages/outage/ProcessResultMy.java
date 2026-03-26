@@ -11,7 +11,7 @@ import outages.service.SentNotificationService;
 import java.util.UUID;
 
 @Component
-public class ProcessResultMy implements ProcessResult {
+public final class ProcessResultMy implements ProcessResult {
 
     @Autowired
     @Lazy

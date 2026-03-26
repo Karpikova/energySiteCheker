@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @Data
 @Entity
 @Table(name = "sent_notifications")
-public class SentNotification {
+public final class SentNotification {
 
     @EmbeddedId
     private SentNotificationId id;

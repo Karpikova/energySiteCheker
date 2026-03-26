@@ -11,7 +11,7 @@ import java.net.http.HttpConnectTimeoutException;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-public class BodyHtml {
+public final class BodyHtml {
 
     private final static Logger LOGGER = LogManager.getLogger(BodyHtml.class);
     private final HttpClient client;

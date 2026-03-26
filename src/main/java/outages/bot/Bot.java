@@ -61,5 +61,4 @@ public final class Bot extends TelegramLongPollingBot implements SendingMessageT
             os.checkNearBy(chatId);
         }
     }
-
 }

@@ -12,7 +12,7 @@ import java.net.http.HttpClient;
 import java.util.List;
 
 @Component
-public class OutageServiceMy implements OutageService {
+public final class OutageServiceMy implements OutageService {
 
     private final static Logger LOGGER = LogManager.getLogger(OutageServiceMy.class);
 
@@ -49,7 +49,7 @@ public class OutageServiceMy implements OutageService {
             LOGGER.info("Found {} outages by radius {}.", filteredByRadius.size(), r);
             sendOutage(filteredByRadius);
         } catch (Exception e) {
-            LOGGER.error("Ошибка верхнего уровня: {}", e);
+            LOGGER.error("Ошибка верхнего уровня: ", e);
         }
     }
 
@@ -61,10 +61,10 @@ public class OutageServiceMy implements OutageService {
                 FilteredOutages filtered = new FilteredOutagesMy(new FoundOutagesFromWeb(body).outages());
                 int filteredByTextSize = filtered.filteredByStringInHeader(search).size();
                 LOGGER.info("Found {} outages by text {}.", filteredByTextSize, search);
-                processResult.processPlainText(String.format("Отключений в %s %s", search, filteredByTextSize));
+                processResult.processPlainText(String.format("Отключений в %s: %s", search, filteredByTextSize));
             }
         } catch (Exception e) {
-            LOGGER.error("Ошибка верхнего уровня: {}", e);
+            LOGGER.error("Ошибка верхнего уровня: ", e);
         }
     }
 

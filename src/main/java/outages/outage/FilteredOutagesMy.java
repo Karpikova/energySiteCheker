@@ -21,9 +21,7 @@ public final class FilteredOutagesMy implements FilteredOutages {
 
     @Override
     public List<Outage> filteredByRadius(Float x, Float y, Float radius) {
-        return outages.stream().filter(q->(Math.abs(q.getGeometry().getX() - x)<radius
-            && (Math.abs(q.getGeometry().getY() - y)<radius))).toList();
-
+        return outages.stream().filter(q -> (Math.abs(q.getGeometry().getX() - x) < radius
+                && (Math.abs(q.getGeometry().getY() - y) < radius))).toList();
     }
-
 }

@@ -13,7 +13,7 @@ import java.util.UUID;
 @AllArgsConstructor
 @NoArgsConstructor
 @Embeddable
-public class SentNotificationId implements Serializable {
+public final class SentNotificationId implements Serializable {
 
     @Column(name = "chat_id")
     private Long chatId;
