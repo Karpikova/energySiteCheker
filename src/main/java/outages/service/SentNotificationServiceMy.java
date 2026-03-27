@@ -30,7 +30,6 @@ public class SentNotificationServiceMy implements SentNotificationService {
 
     @Override
     public boolean existsByIdChatIdAndIdOutageId(Long chatId, UUID outageId) {
-        repository.existsByIdChatIdAndIdOutageId(chatId, outageId);
-        return false;
+        return repository.existsByIdChatIdAndIdOutageId(chatId, outageId);
     }
 }
